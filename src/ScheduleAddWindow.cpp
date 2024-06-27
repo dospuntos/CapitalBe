@@ -274,11 +274,16 @@ ScheduleAddWindow::MessageReceived(BMessage* msg)
 
 			stdata.SetDate(tempdate);
 
+
 			gDatabase.AddScheduledTransaction(stdata);
 
 			if (fTransData.Type().TypeCode() == TRANS_XFER) {
+				// Set payee for counterpart
+				BString payee = B_TRANSLATE("Transfer from '%%PAYEE%%'");
+				payee.ReplaceFirst("%%PAYEE%%", stdata.GetAccount()->Name());
 				// Get the counterpart and add it to the scheduled list
 				gDatabase.GetTransferCounterpart(stdata.GetID(), stdata);
+				stdata.SetPayee(payee.String());
 				gDatabase.AddScheduledTransaction(stdata);
 			}
 

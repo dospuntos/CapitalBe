@@ -29,6 +29,8 @@ public:
 	void CalculateNextDueDate(void);
 
 	time_t GetNextDueDate(void) const { return fNextDate; }
+	void SetDestination(int32 destination) { fDestination = destination; }
+	int32 GetDestination(void) const { return fDestination; }
 
 	// If everything which needs to be in a transaction is there and valid, it
 	// returns true
@@ -38,6 +40,7 @@ public:
 private:
 	TransactionInterval fInterval;
 	uint32 fCount;
+	int32 fDestination;
 	time_t fNextDate;
 };
 

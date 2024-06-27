@@ -933,7 +933,6 @@ bool
 Database::GetTransferCounterpart(const uint32& transid, TransactionData& data)
 {
 	LOCK;
-
 	BString command;
 	command << "SELECT accountid FROM transactionlist WHERE transid = " << transid << " AND "
 			<< "accountid != " << data.GetAccount()->GetID() << ";";
@@ -944,10 +943,12 @@ Database::GetTransferCounterpart(const uint32& transid, TransactionData& data)
 	query.finalize();
 
 	UNLOCK;
+	Account* temp;
+	temp = AccountByID(accountid);
+	data.SetAccount(temp);
+	return true;
 
-	data.SetAccount(AccountByID(accountid));
-
-	return GetTransaction(transid, data);
+	//return GetTransaction(transid, data);
 }
 
 void
@@ -1051,7 +1052,7 @@ Database::GetScheduledTransaction(const uint32& transid, ScheduledTransData& dat
 
 	command
 		= "SELECT accountid,date,payee,amount,category,memo,type,nextdate,"
-		  "count,interval FROM scheduledlist WHERE transid = ";
+		  "count,interval,destination FROM scheduledlist WHERE transid = ";
 	command << transid << ";";
 	query = DBQuery(command.String(), "Database::GetScheduledTransaction:get transaction data");
 
@@ -1071,6 +1072,8 @@ Database::GetScheduledTransaction(const uint32& transid, ScheduledTransData& dat
 	data.SetNextDueDate(query.getInt64Field(7));
 	data.SetCount(query.getIntField(8));
 	data.SetInterval((TransactionInterval)query.getIntField(9));
+	data.SetDestination(query.getIntField(10));
+
 	while (!query.eof()) {
 		Fixed f;
 		f.SetPremultiplied(atol(query.getStringField(3)));

@@ -80,7 +80,6 @@ TransferWindow::InitObject(Account* src, Account* dest, const Fixed& amount)
 		BSize(be_plain_font->StringWidth(B_TRANSLATE("Date:")) + 10, B_SIZE_UNSET));
 	fDate = new DateBox("datebox", NULL, "", NULL);
 	fDate->GetFilter()->SetMessenger(new BMessenger(this));
-	//	fDate->SetEscapeCancel(true);
 
 	CalendarButton* calendarButton = new CalendarButton(fDate);
 
@@ -126,6 +125,8 @@ TransferWindow::InitObject(Account* src, Account* dest, const Fixed& amount)
 		else
 			fDestList->Select(0L);
 		fAmount->MakeFocus(true);
+
+		fOK->SetEnabled(true);
 	} else
 		fDestList->MakeFocus(true);
 

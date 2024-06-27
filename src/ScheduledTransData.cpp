@@ -15,7 +15,8 @@ ScheduledTransData::ScheduledTransData(Account* account, const char* date, const
 	: TransactionData(account, date, type, payee, amount, category, memo, TRANS_OPEN),
 	  fInterval(interval),
 	  fCount(count),
-	  fNextDate(0)
+	  fNextDate(0),
+	  fDestination(-1)
 {
 }
 
@@ -29,7 +30,8 @@ ScheduledTransData::ScheduledTransData(
 	: TransactionData(data),
 	  fInterval(interval),
 	  fCount(count),
-	  fNextDate(0)
+	  fNextDate(0),
+	  fDestination(-1)
 {
 }
 
@@ -41,6 +43,7 @@ ScheduledTransData::operator=(const ScheduledTransData& from)
 	TransactionData::operator=(from);
 	fInterval = from.GetInterval();
 	fCount = from.GetCount();
+	fDestination = from.GetDestination();
 	return *this;
 }
 
@@ -98,4 +101,5 @@ ScheduledTransData::MakeEmpty(void)
 	TransactionData::MakeEmpty();
 	fInterval = SCHEDULED_UNKNOWN;
 	fCount = 0;
+	fDestination = -1;
 }
